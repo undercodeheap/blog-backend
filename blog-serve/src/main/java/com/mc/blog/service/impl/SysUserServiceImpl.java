@@ -10,6 +10,8 @@ import com.mc.blog.service.SysUserService;
 import com.mc.blog.vo.ErrorCode;
 import com.mc.blog.vo.LoginUserVo;
 import com.mc.blog.vo.Result;
+import com.mc.blog.vo.UserVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -76,5 +78,20 @@ public class SysUserServiceImpl implements SysUserService {
         // 默认生成是雪花算法
         // mybatis-plus
         sysUserMapper.insert(sysUser);
+    }
+
+    @Override
+    public UserVo findUserVoById(Long authorId) {
+        SysUser sysUser = sysUserMapper.selectById(authorId);
+        if (sysUser == null){
+            sysUser = new SysUser();
+            sysUser.setId(1L);
+            sysUser.setAvatar("/static/img/logo.b3a48c0.png");
+            sysUser.setNickname("神秘人");
+        }
+        UserVo userVo  = new UserVo();
+        BeanUtils.copyProperties(sysUser,userVo);
+        userVo.setId(String.valueOf(sysUser.getId()));
+        return userVo;
     }
 }

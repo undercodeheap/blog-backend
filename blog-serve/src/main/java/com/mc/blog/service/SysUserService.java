@@ -2,6 +2,7 @@ package com.mc.blog.service;
 
 import com.mc.blog.entity.SysUser;
 import com.mc.blog.vo.Result;
+import com.mc.blog.vo.UserVo;
 
 public interface SysUserService {
 
@@ -28,4 +29,11 @@ public interface SysUserService {
      * @param sysUser
      */
     void save(SysUser sysUser);
+
+    /**
+     * 根据Id获得作者
+     * @param authorId
+     * @return
+     */
+    UserVo findUserVoById(Long authorId);
 }
