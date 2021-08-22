@@ -1,6 +1,7 @@
 package com.mc.blog.service;
 
 import com.mc.blog.vo.Result;
+import com.mc.blog.vo.params.ArticleParam;
 import com.mc.blog.vo.params.PageParams;
 
 public interface ArticleService {
@@ -36,4 +37,6 @@ public interface ArticleService {
      * @return
      */
     Result findArticleById(Long articleId);
+
+    Result publish(ArticleParam articleParam);
 }

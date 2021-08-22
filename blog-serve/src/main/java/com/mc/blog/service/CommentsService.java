@@ -1,6 +1,7 @@
 package com.mc.blog.service;
 
 import com.mc.blog.vo.Result;
+import com.mc.blog.vo.params.CommentParam;
 
 public interface CommentsService {
     /**
@@ -9,4 +10,6 @@ public interface CommentsService {
      * @return
      */
     Result commentsByArticleId(Long articleId);
+
+    Result comment(CommentParam commentParam);
 }

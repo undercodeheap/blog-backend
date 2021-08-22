@@ -2,12 +2,15 @@ package com.mc.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.mc.blog.entity.Comment;
+import com.mc.blog.entity.SysUser;
 import com.mc.blog.mapper.CommentMapper;
 import com.mc.blog.service.CommentsService;
 import com.mc.blog.service.SysUserService;
+import com.mc.blog.utils.UserThreadLocal;
 import com.mc.blog.vo.CommentVo;
 import com.mc.blog.vo.Result;
 import com.mc.blog.vo.UserVo;
+import com.mc.blog.vo.params.CommentParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,27 @@ public class CommentsServiceImpl implements CommentsService {
         List<CommentVo> commentVoList = copyList(comments);
 
         return Result.success(commentVoList);
+    }
+
+    @Override
+    public Result comment(CommentParam commentParam) {
+        SysUser sysUser = UserThreadLocal.get();
+        Comment comment = new Comment();
+        comment.setArticleId(commentParam.getArticleId());
+        comment.setAuthorId(sysUser.getId());
+        comment.setContent(commentParam.getContent());
+        comment.setCreateDate(System.currentTimeMillis());
+        Long parent = commentParam.getParent();
+        if (parent == null || parent == 0) {
+            comment.setLevel(1);
+        }else{
+            comment.setLevel(2);
+        }
+        comment.setParentId(parent == null ? 0 : parent);
+        Long toUserId = commentParam.getToUserId();
+        comment.setToUid(toUserId == null ? 0 : toUserId);
+        commentMapper.insert(comment);
+        return Result.success(null);
     }
 
     private List<CommentVo> copyList(List<Comment> comments) {
